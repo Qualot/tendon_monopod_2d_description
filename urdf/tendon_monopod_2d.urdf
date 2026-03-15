@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<robot name="tendon_monopod_2d">
+    <!-- material definitions -->
+    <material name="Cyan">
+        <color rgba="0 1.0 1.0 1.0"/>
+    </material>
+    <material name="frame">
+        <color rgba=".2 .2 .2 1"/>
+    </material>
+    <material name="frame_white">
+        <color rgba=".8 .8 .8 1"/>
+    </material>
+    <material name="joint_edge">
+        <color rgba=".8 .8 .8 1"/>
+    </material>
+    <material name="joint_center">
+        <color rgba=".2 .2 .2 1"/>
+    </material>
+
+
+    <link name="pelvis">
+        <visual>
+            <geometry>
+                <box size=".6 .03 .03"/>
+            </geometry>
+            <material name="frame"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size=".03 .03 .1"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 -.05"/>
+            <material name="frame_white"/>
+        </visual>
+    </link>
+    <link name="upper">
+        <visual>
+            <geometry>
+                <box size=".03 .03 .3"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 -.15"/>
+            <material name="frame"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder length=".04" radius=".05"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="joint_edge"/>
+        </visual>
+        <visual>
+           <geometry>
+                <cylinder length=".05" radius=".04"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="joint_center"/>
+       </visual>
+    </link>
+    <link name="lower">
+        <visual>
+            <geometry>
+                <box size=".03 .03 .3"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 -0.15"/>
+            <material name="frame"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder length=".04" radius=".05"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="joint_edge"/>
+        </visual>
+        <visual>
+           <geometry>
+                <cylinder length=".05" radius=".04"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="joint_center"/>
+       </visual>
+    </link>
+    <link name="foot">
+        <visual>
+            <geometry>
+                <box size=".025 .025 .1"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 -.05"/>
+            <material name="frame_white"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size=".4 .03 .03"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz=".03 0 -0.1"/>
+            <material name="frame"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder length=".04" radius=".05"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="joint_edge"/>
+        </visual>
+        <visual>
+           <geometry>
+                <cylinder length=".05" radius=".04"/>
+            </geometry>
+            <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+            <material name="joint_center"/>
+       </visual>
+    </link>
+
+    <joint name="joint0" type="revolute">
+        <axis xyz="0 1 0"/>
+        <limit effort="1000.0" lower="-3.1415" upper="3.1415" velocity="100"/>
+        <parent link="pelvis"/>
+        <child link="upper"/>
+        <origin xyz="0 0 -.1"/>
+    </joint>
+    <joint name="joint1" type="revolute">
+        <axis xyz="0 1 0"/>
+        <limit effort="1000.0" lower="-3.1415" upper="3.1415" velocity="100"/>
+        <parent link="upper"/>
+        <child link="lower"/>
+        <origin xyz="0 0 -.3"/>
+    </joint>
+    <joint name="joint2" type="revolute">
+        <axis xyz="0 1 0"/>
+        <limit effort="1000.0" lower="-3.1415" upper="3.1415" velocity="100"/>
+        <parent link="lower"/>
+        <child link="foot"/>
+        <origin xyz="0 0 -.3"/>
+    </joint>
+
+    <!-- transmissions -->
+    <transmission name="hip_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="hip_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="joint0">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    </transmission>
+
+    <transmission name="knee_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="knee_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="joint1">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    </transmission>
+
+    <transmission name="ankle_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="ankle_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="joint2">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    </transmission>
+</robot>
